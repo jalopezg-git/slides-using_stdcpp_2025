@@ -1,0 +1,93 @@
+\makeatletter\let\ifGm@compatii\relax\makeatother
+\RequirePackage{atbegshi}
+\documentclass[final,hyperref={pdfpagemode=FullScreen},aspectratio=169,10pt]{beamer}
+
+\usepackage[english]{babel}
+\usepackage{lmodern,hyperref,amsmath,amssymb,pdftexcmds,listings,lstautogobble,tikz,ulem,xspace}
+\usepackage{appendixnumberbeamer}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fontawesome5}
+\usepackage{qrcode}
+\usepackage[export]{adjustbox}
+%\ttfamily\DeclareFontShape{T1}{lmtt}{m}{it}
+%                          {<->sub*lmtt/m/sl}{}
+
+\input{beamer-settings}
+\input{sticky-notes}
+
+\def\llvmURL{https://llvm.org/}
+
+\hypersetup{final,
+	        plainpages=false,
+	        %hyperfootnotes=false,
+	        colorlinks=true,
+	        linkcolor=cerulean,
+	        urlcolor=black,
+	        citecolor=cerulean,
+	        pdfpagemode=UseOutlines,
+	        pdfstartview=FitH,
+	        pdfborder={0 0 0}}
+
+% ---- pgfplots
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ---- tikz
+\usepackage{tikz}
+\usetikzlibrary{fit,matrix,positioning,chains,arrows.meta,shapes.multipart,shapes.geometric,pgfplots.groupplots,graphs,graphdrawing,shadows.blur}
+\usegdlibrary{trees}
+\pgfdeclarelayer{background}\pgfsetlayers{background,main}
+
+% ---- listings
+\usepackage{listing,lstautogobble}
+\definecolor{lstkeyword}{HTML}{01497c}
+\definecolor{lststring}{HTML}{a4133c}
+\definecolor{lstcomment}{HTML}{718355}
+\definecolor{lsthl}{HTML}{ffd166}
+\definecolor{lstinline}{HTML}{D62B53}
+\lstset{
+    escapechar=`,
+    tabsize=3,
+    breaklines=true,
+    basicstyle={\ttfamily\scriptsize},
+    keywordstyle={\color{lstkeyword}\bfseries},
+    commentstyle={\color{lstcomment}},
+    stringstyle={\color{lststring}},
+}
+\lstdefinestyle{c++}{
+    language=c++,
+    backgroundcolor=\color{black!6},
+%    keywordstyle=[2]{\color{lstkeyword}\bfseries},
+%    morekeywords=[2]{},
+}
+\lstdefinestyle{bash}{
+    language=bash,
+    backgroundcolor=\color{black!6},
+}
+
+\def\lsthl#1{\raisebox{-.1ex}{\tikz\node[inner sep=0pt,fill=lsthl]{#1};}}
+\def\inlineCode#1{\raisebox{-.7ex}{\tikz{\node[font={\footnotesize\ttfamily},rounded corners,color=lstinline,fill=black!6]{#1};}}}
+
+\title{\texttt{std::launder}, \texttt{std::start\_lifetime\_as}, and UB in \texttt{reinterpret\_cast}}
+\subtitle{OR\ldots type punning done right}
+\author[Javier López-Gómez]{Javier López-Gómez}
+\date{\texttt{using std::cpp}, 2025-03-19}
+
+\begin{document}
+\maketitle
+\input{content/aboutme}
+
+\begin{frame}{Contents}
+  \tableofcontents[hidesubsections]
+\end{frame}
+
+\input{content/introduction}
+\input{content/closing}
+
+\makeendpage
+% ==== APPENDIX ====
+\input{content/backup}
+
+\appendix
+\end{document}

@@ -1,0 +1,74 @@
+\makeatletter
+\pgfdeclareshape{document}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+% compute corner of ??flipped page??
+\pgf@xc=\pgf@xb \advance\pgf@xc by-10pt % this should be a parameter
+\pgf@yc=\pgf@yb \advance\pgf@yc by-10pt
+% construct main path
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+\pgfpathclose
+% add little corner
+\pgfpathmoveto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+}
+}
+\makeatother
+
+\NewDocumentCommand\StickyNote{O{6cm}mO{6cm}}{%
+\node[
+document,
+draw,
+drop shadow={
+  shadow xshift=2pt,
+  shadow yshift=-4pt
+},
+inner xsep=7pt,
+fill=myyellow,
+xslant=-0.1,
+yslant=0.1,
+inner ysep=10pt
+] {\parbox[t][#1][c]{#3}{#2}};
+}
+
+\NewDocumentCommand\StickyNotePi{O{6cm}mO{6cm}}{%
+\node[
+document,
+draw,
+fill=myyellow,
+inner xsep=10pt,
+xslant=-0.1,
+yslant=0.1,
+inner ysep=0pt,
+text depth=\the\dimexpr#1+2.5ex\relax
+] {\parbox[t][#1][c]{#3}{#2}};
+}
+
+\NewDocumentCommand\StickyNoteMinusPi{O{6cm}mO{6cm}}{%
+\node[
+document,
+draw,
+fill=myyellow,
+inner xsep=10pt,
+xslant=0.1,
+yslant=-0.1,
+inner ysep=0pt,
+text depth=\the\dimexpr#1+2.5ex\relax
+] {\parbox[t][#1][c]{#3}{#2}};
+}

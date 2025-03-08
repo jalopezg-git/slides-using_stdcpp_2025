@@ -1,0 +1,36 @@
+\tikz[start chain=c going right,node distance=11pt,
+  every node/.style={font=\scriptsize},
+  every on chain/.style={join=by ->},
+  rect/.style={draw,fill=white,text width=1in,align=center,minimum height=22pt,inner sep=1pt},
+  container/.style={draw,densely dotted,top color=black!6,bottom color=white,rounded corners}]{
+
+  \begin{scope}[every node/.append style=on chain]
+    \path node(test_cpp) {test.cpp}
+    % Frontend
+    node(lexer)[rect] {Lexical analysis\\ (Lexer)}
+    node(parser)[rect] {Syntactic analysis\\ (Parser)}
+    node(sema)[rect] {Semantic analysis\\ (Sema)}
+    node(IR)[rect] {Generate IR}
+    % Backend
+    node(optI)[continue chain=c going below,node distance=42pt,rect] {Arch-independent optimization}
+    node(optD)[continue chain=c going left,node distance=11pt,rect] {Arch-dependent optimization}
+    node(codegen)[rect] {Code generation}
+    %
+    node(test_0) {test.o};
+  \end{scope}
+
+  % Symbol tables and AST
+  \draw[<->] (parser) -- ++(up:30pt) node(symtabs)[at end,anchor=south,label={right:Symbol tables}]{\tikz\foreach \i
+    in {0pt,-2pt,-4pt} \node[inner sep=4pt,draw,fill=white,xshift=\i,yshift=\i]{};};
+  \draw[<->] (sema) -- ++(up:30pt) node(ast)[at end,anchor=south,label={right:AST}]{\tikz\graph[tree layout,level distance=4pt,sibling distance=4pt,nodes={circle,inner sep=1.5pt,as=,fill=black}]{ a -- { b, c }};};
+
+  % Draw fronend and backend rectangles
+  \begin{pgfonlayer}{background}
+    \path node(fe)[container,inner xsep=4pt,inner ysep=3pt,yshift=-3pt,fit={(lexer)(parser)(sema)(IR)(ast)}]{}
+          node(be)[container,inner xsep=4pt,inner ysep=12pt,yshift=6pt,fit={(optI)(optD)(codegen)}]{};
+
+    \foreach \i/\j in {fe/{Compiler frontend},be/{Compiler backend (LLVM)}}
+      \node[font={\scriptsize\bfseries},above=0pt of \i.north west,anchor=north west]{\j};
+  \end{pgfonlayer}
+
+}

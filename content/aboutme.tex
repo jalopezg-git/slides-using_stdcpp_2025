@@ -1,0 +1,33 @@
+% ==== About me ====
+\begin{frame}{About me}
+  \begin{center}
+    \tikz{\path node(pic) {\includegraphics[width=.75in]{img/my-picture.png}}
+      node(name) [right=0pt of pic,yshift=1.25em,font={\bfseries},text width=2.5in] {\underline{Javier Lopez-Gomez}}
+      node[below=0pt of name,text width=2.5in] {\small%
+        \faGithub~\href{https://github.com/jalopezg-git}{jalopezg-git}\hfill
+        \faGlobe~\href{https://jalopezg.dev/}{https://jalopezg.dev/}\\
+        \faEnvelope~javier.lopez.gomez AT proton.me};}\\
+  \end{center}
+
+  \vfill
+  Summary of the last 5+ years (compilers-wise)\ldots{}
+  \begin{itemize}
+  \item 2017--2020: PhD in Computer Science and Technology (ARCOS-UC3M)
+    \begin{itemize}
+    \item Prototype implementation of C++ contracts (clang)
+    \item Research internship at CERN in 2019: Definition shadowing in cling
+    \end{itemize}
+    \medskip
+
+  \item 2020--2023: Senior Fellow (SFT, CERN)
+    \begin{itemize}
+    \item More cling -- but also RNTuple and general contributions to the ROOT project
+    \end{itemize}
+    \medskip
+
+  \item \textbf{2024--(currently): Senior Compiler Engineer (Zimperium, Inc.)}
+    \begin{itemize}
+    \item Software obfuscation that operates directly AArch64 binaries
+    \end{itemize}
+  \end{itemize}
+\end{frame}
