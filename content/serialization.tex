@@ -1,23 +1,121 @@
 % ==== Practical Case: (de-)serialization ====
 \section{Practical Case: (de-)serialization}
 
-\begin{frame}{Introduction to serialization (1)}
+\begin{frame}[fragile]{Introduction to serialization (1)}
+  \textbf{Serialize:} lay out an in-memory \textbf{data structure} as a \textbf{sequence of bytes}.
+  \vfill
+
+  \begin{block}{Note that\ldots}
+    \begin{itemize}
+    \item A type can have nested pointers / references
+
+    \item \inlineCode{sizeof(int)}, \inlineCode{sizeof(long)}, etc. can vary depending on target\footnote{See, e.g. ILP32, LLP64 models.}
+      \begin{lstlisting}[style=c++]
+        static_cast(sizeof(char) == 1); // ??
+        static_cast(sizeof(int) == 4); // ??
+      \end{lstlisting}
+
+    \item Differences in machine endianness
+
+    \item Types require alignment (+ maybe padding)
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}{Introduction to serialization (2)}
+  \begin{block}{Can be just \texttt{memcpy()} if\ldots}
+    \begin{itemize}
+      \itemsep=1em
+    \item Data structure is trivially copiable
+
+    \item No pointers / references to other data structures
+
+    \item Uses fixed-width types, e.g. \texttt{uint32\_t}
+
+    \item Machine boundary is never crossed (e.g. IPC)
+
+    \item Alignment is satisfied on de-serialization
+    \end{itemize}
+  \end{block}
+
+  \begin{onlyenv}<2>
+    \overlayLayer{
+      {\bfseries Else, implement proper data serialization!}\\[1em]
+      \begin{itemize}
+      \item Encode numbers using a common endianness, e.g. big-endian
+        %
+      \item Flatten data structure to byte buffer $\rightarrow$ follow pointers / references
+      \end{itemize}
+    }
+  \end{onlyenv}
 \end{frame}
 
-\begin{frame}{Example: machine boundary NOT crossed: 'serialize'}
+\begin{frame}[fragile]{Example}
+  Let's consider this simple data structure
+  \begin{lstlisting}[style=c++]
+    struct Foobar {
+      uint64_t l64;
+      uint32_t i32;
+
+      static size_t Serialize(const Foorbar& obj, unsigned char *buf);
+      static Foobar Deserialize(const unsigned char *buf);
+    };
+  \end{lstlisting}
 \end{frame}
 
-\begin{frame}{Example: machine boundary NOT crossed: 'deserialize'}
+\begin{frame}[fragile]{Example: machine boundary NOT crossed: '(de-)serialize'}
+  \begin{lstlisting}[style=c++]
+    size_t Foobar::Serialize(const Foorbar& obj, unsigned char *buf) {
+      memcpy(buf, &obj, sizeof(Foobar));
+    }
+
+    Foobar Foobar::Deserialize(const unsigned char *buf) {
+      Foobar ret;
+      memcpy(&ret, buf, sizeof(Foobar));
+      return ret;
+    }
+  \end{lstlisting}
+
+  \begin{onlyenv}<2>
+    \overlayLayer{
+      Padding bytes are \textbf{unspecified}. \alert{If you care, avoid this!}.
+    }
+  \end{onlyenv}
 \end{frame}
 
-\begin{frame}{Example: machine boundary crossed: serialize}
-\end{frame}
+\begin{frame}[fragile]{Example: machine boundary crossed: (de-)serialize}
+  \begin{lstlisting}[style=c++]
+    size_t Foobar::Serialize(const Foorbar& obj, unsigned char *buf) {
+      buf += SerializeUInt64(obj.l64, buf);
+      buf += SerializeUInt32(obj.i32, buf);
+    }
 
-\begin{frame}{Example: machine boundary crossed: deserialize}
+    Foobar Foobar::Deserialize(const unsigned char *buf) {
+      Foobar ret;
+      buf += DeserializeUInt64(buf, obj.l64);
+      buf += DeserializeUInt32(buf, obj.i32);
+      return ret;
+    }
+  \end{lstlisting}
+
+  \begin{onlyenv}<2>
+    \overlayLayer{
+      Example of UInt32 little-endian (de-)serialization\\[1ex]
+      \lstinputlisting[style=c++]{code/serialize.cpp}
+    }
+  \end{onlyenv}
 \end{frame}
 
 \begin{frame}{Summary}
+  \begin{block}{As a rule of thumb}
+    \begin{itemize}
+      \itemsep=1em
+    \item \textit{standard-layout / POD} + machine boundary not crossed (ever) $\rightarrow$ copy + start lifetime on receiving end
+
+    \item Rest: implement proper serialization!
+    \end{itemize}
+  \end{block}
+
+  \vfill
+  See also: \linkButton{https://www.boost.org/doc/libs/1_87_0/libs/serialization/doc/index.html}{Boost Serialization}
 \end{frame}
