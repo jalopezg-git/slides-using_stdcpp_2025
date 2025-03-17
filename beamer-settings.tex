@@ -269,15 +269,18 @@
 }
 
 \def\maketitle{%
-    {\setbeamercolor{background canvas}{bg=cerulean}
+    {\setbeamertemplate{background canvas}{%
+                                   \tikz[remember picture,overlay]\node[fit=(current page),top color=verdigris,bottom color=cerulean,shading angle=45]{};}
     \setbeamercolor{alerted text}{fg=invforeground}
     \begin{frame}[plain,noframenumbering,label=titlepage]
         \centering
         \vspace{-1.5cm}\titlepage
     \end{frame}}}
 \def\makeendpage{%
-    {\setbeamercolor{background canvas}{bg=cerulean}
+    {\setbeamertemplate{background canvas}{%
+                                   \tikz[remember picture,overlay]\node[fit=(current page),top color=verdigris,bottom color=cerulean,shading angle=45]{};}
     \setbeamercolor{alerted text}{fg=invforeground}
+    \setbeamercolor*{enumerate item}{fg=white}
     \begin{frame}[plain,noframenumbering,label=titlepage]
         \centering
         \vfill
@@ -286,6 +289,18 @@
                 node[font={\fontsize{24}{24}\selectfont},white] {Thank you!};
         }
         \vfill
+        %
+        \ifthenelse{\isundefined{\thisPresentationURL}}{}{%
+                \begin{center}
+                \tikz\node[fill=white]{\qrcode[height=1in]{\thisPresentationURL}};\\[1ex]
+                \textcolor{white}{\itshape\small [Link to slides used in this presentation]}
+                \end{center}%
+        }
+        %
+        \ifthenelse{\isundefined{\endpageFootnote}}{}{%
+                {\color{white}\footnotesize\rule{6em}{.1pt}\\
+                                \endpageFootnote}
+        }
     \end{frame}}}
 
 %\setsansfont[BoldFont=Fira Sans Regular,ItalicFont=Fira Sans Light Italic,Ligatures=NoCommon]{Fira Sans Light}

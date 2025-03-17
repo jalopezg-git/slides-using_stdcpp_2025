@@ -3,7 +3,7 @@
 \documentclass[final,hyperref={pdfpagemode=FullScreen},aspectratio=169,10pt]{beamer}
 
 \usepackage[english]{babel}
-\usepackage{lmodern,hyperref,amsmath,amssymb,pdftexcmds,listings,lstautogobble,tikz,ulem,xspace}
+\usepackage{lmodern,hyperref,amsmath,amssymb,pdftexcmds,listings,lstautogobble,tikz,ulem,xspace,ifthen}
 \usepackage{appendixnumberbeamer}
 \usepackage[utf8]{luainputenc}
 \usepackage[T1]{fontenc}
@@ -16,6 +16,12 @@
 \input{beamer-settings}
 \input{sticky-notes}
 
+\def\endpageFootnote{%
+        \begin{enumerate}
+        \item \textcolor{white}{Paragraphs from the ISO C++ standard have been cited verbatim from the working draft.}
+        \end{enumerate}
+}
+\def\thisPresentationURL{https://github.com/jalopezg-git/slides-using_stdcpp_2025/blob/master/main.pdf}
 \def\llvmURL{https://llvm.org/}
 
 \hypersetup{final,
