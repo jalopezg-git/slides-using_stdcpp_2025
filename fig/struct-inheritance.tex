@@ -1,0 +1,25 @@
+\tikz[byte/.style={draw,very thin,minimum width=14pt,minimum height=14pt,inner xsep=7pt},
+                                start chain=c going right,node distance=0pt]{
+\def\ptr#1#2{\draw[<-] (#1) -- ++(0pt,-10pt) node[at end,anchor=north] {#2};}
+
+\node[on chain,font={\ttfamily\footnotesize}] {MostDerived};
+
+\foreach \i in {0,...,3}
+         \node[byte,fill=magenta!50!white!70,on chain=c] (i_\i) {};
+\foreach \i in {0,...,3}
+         \node[byte,fill=green!50!white!70,on chain=c] (f_\i) {};
+\foreach \i in {0,...,7}
+         \node[byte,fill=cyan!50!white!70,on chain=c] (d_\i) {};
+
+\ptr{i_0.south west}{offset 0}
+\ptr{f_0.south west}{offset 4}
+\ptr{d_0.south west}{offset 8}
+
+\node[below=25pt of d_0,font={\ttfamily},text width=4in]{
+\begin{lstlisting}[style=c++,basicstyle={\ttfamily\footnotesize},backgroundcolor={}]
+struct  Base { `\textcolor{magenta!50!white!70}{int i;}` }
+struct  Derived : Base { `\textcolor{green!50!white!70}{float f;}` }
+struct  MostDerived : Derived { `\textcolor{cyan!50!white!70}{double d;}` }
+\end{lstlisting}
+};
+}
