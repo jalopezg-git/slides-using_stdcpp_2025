@@ -1,10 +1,70 @@
 % ==== C++ trivia ====
 
 \begin{frame}[fragile]{C++ trivia (1)}
+  Let's assume this type definition for \texttt{MyType}.
+  \begin{lstlisting}[style=c++]
+    struct MyType {
+      uint32_t i;
+      float f;
+    };
+    static_assert(sizeof(MyType) == 8 && alignof(MyType) == 4);
+  \end{lstlisting}
+  \vfill
+
+  \textbf{Is this well-defined C++ or UB?}
+  \begin{lstlisting}[style=c++]
+    unsigned char b[]{0x00, 0x11, 0x22, 0x33, 0xff, 0x00, 0xff, 0x00};
+    auto *p = reinterpret_cast<MyType *>(&b);
+    some_fn_taking_int(p->i);
+  \end{lstlisting}
+
+  \begin{onlyenv}<2>
+    \overlayLayer{\UB~~\facepalm~~due to\\[1ex]
+      \begin{itemize}
+      \item Violates strict aliasing
+      \item Storage may not be suitably aligned for \inlineCode{MyType}
+      \item \inlineCode{p} accesses \inlineCode{MyType} object out of its lifetime
+      \end{itemize}
+    }
+  \end{onlyenv}
 \end{frame}
 
 \begin{frame}[fragile]{C++ trivia (2)}
+  Given the previous definition for \texttt{MyType}, again
+  \vfill
+
+  \textbf{Is this well-defined C++ or UB?}
+  \begin{lstlisting}[style=c++]
+    MyType foo{123, 42.0f};
+    auto *p = reinterpret_cast<unsigned char *>(&foo);
+    fn_doing_something_on_char_array(p, sizeof(MyType));
+  \end{lstlisting}
+
+  \begin{onlyenv}<2>
+    \overlayLayer{\maybeUB~~\facepalm\facepalm\\[1ex]
+      \begin{itemize}
+      \item See \href{https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p1839r7.html}{P1839R7}; a defect in ISO CPP standard?
+      \end{itemize}
+    }
+  \end{onlyenv}
 \end{frame}
 
 \begin{frame}[fragile]{C++ trivia (3)}
+  Given the previous definition for \texttt{MyType}, again
+  \vfill
+
+  \textbf{Is this well-defined C++ or UB?}
+  \begin{lstlisting}[style=c++]
+    alignas(MyType) unsigned char b[]{0x00, 0x11, 0x22, 0x33, 0xff, 0x00, 0xff, 0x00};
+    auto o = std::bit_cast<MyType>(b);
+    some_fn_taking_int(p->i);
+  \end{lstlisting}
+
+  \begin{onlyenv}<2>
+    \overlayLayer{\wellDefined\\[1ex]
+      \begin{itemize}
+      \item Note, however, that result may vary depending on arch endianness
+      \end{itemize}
+    }
+  \end{onlyenv}
 \end{frame}
