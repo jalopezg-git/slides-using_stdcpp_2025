@@ -8,6 +8,7 @@
 \usepackage[utf8]{luainputenc}
 \usepackage[T1]{fontenc}
 \usepackage{fontawesome5}
+\usepackage{emoji}
 \usepackage{qrcode}
 \usepackage[export]{adjustbox}
 %\ttfamily\DeclareFontShape{T1}{lmtt}{m}{it}
@@ -45,6 +46,14 @@
 \usegdlibrary{trees}
 \pgfdeclarelayer{background}\pgfsetlayers{background,main}
 
+\def\overlayLayer#1{\tikz[remember picture,overlay]\node[at=(current page.center),%
+                                  text width=0.9\textwidth,minimum height=0.5\textheight,align=center,%
+                                  draw=black,fill=white]{#1};}
+
+\tikzset{
+        tag/.style={white,draw=#1!50!black!70,fill=#1!50!black!50,rounded corners,minimum width=0,minimum height=0,font={\large}}
+}
+
 % ---- listings
 \usepackage{listing,lstautogobble}
 \definecolor{lstkeyword}{HTML}{01497c}
@@ -56,7 +65,7 @@
     escapechar=`,
     tabsize=3,
     breaklines=true,
-    basicstyle={\ttfamily\scriptsize},
+    basicstyle={\ttfamily\small},
     keywordstyle={\color{lstkeyword}\bfseries},
     commentstyle={\color{lstcomment}},
     stringstyle={\color{lststring}},
@@ -73,7 +82,21 @@
 }
 
 \def\lsthl#1{\raisebox{-.1ex}{\tikz\node[inner sep=0pt,fill=lsthl]{#1};}}
-\def\inlineCode#1{\raisebox{-.7ex}{\tikz{\node[font={\footnotesize\ttfamily},rounded corners,color=lstinline,fill=black!6]{#1};}}}
+\def\inlineCode#1{\raisebox{-.7ex}{\tikz{\node[font={\footnotesize\ttfamily},rounded corners,color=lstinline,fill=black!6,minimum height=0]{#1};}}}
+
+\def\UB{\tikz\node[tag=red]{UNDEFINED BEHAVIOR};}
+\def\maybeUB{\tikz\node[tag=magenta]{(MOSTLY) UNDEFINED BEHAVIOR};}
+\def\wellDefined{\tikz\node[tag=green]{WELL-DEFINED};}
+
+\def\facepalm{\emoji{person-facepalming}}
+\def\worried{\emoji{worried-face}}
+\def\OK{\emoji{check-mark-button}}
+\def\NotOK{\emoji{cross-mark}}
+
+\def\linkButton#1#2{\tikz\node[draw=teal!50!black!50,minimum height=0,%
+        top color=white,bottom color=teal!50!black!20,%
+        rounded corners]{\raisebox{.9em}{\rotatebox{-90}{$\triangle$}} ~\href{#1}{#2}};}
+\def\godbolt#1{\linkButton{#1}{See in Godbolt}}
 
 \title{\texttt{std::launder}, \texttt{std::start\_lifetime\_as}, and UB in \texttt{reinterpret\_cast}}
 \subtitle{OR\ldots type punning done right}
@@ -90,8 +113,8 @@
 \end{frame}
 
 \input{content/introduction}
-\input{content/strict-aliasing}
 \input{content/type-layout}
+\input{content/strict-aliasing}
 \input{content/type-punning}
 \input{content/serialization}
 \input{content/closing}
