@@ -4,15 +4,21 @@
 \begin{frame}{Ideas to take home}
   \begin{block}{About \texttt{reinterpret\_cast}}
     \begin{itemize}
-    \item
+    \item Most of its uses are UB; don't do it unless you are absolutely sure!
+    \item Even \texttt{reinterpret\_cast$<$char *$>$} is not well-defined, but it works in practice
+    \item Use \texttt{std::bit\_cast} or \texttt{std::start\_lifetime\_as} if available
     \end{itemize}
   \end{block}
 
   \begin{block}{Type punning is only okay if\ldots}
     \begin{itemize}
-    \item
+    \item It doesn't break the strict aliasing rule
+    \item Only accesses bytes reachable through the original pointer
+    \item Complies to the alignment requirements of the type
+    \item The accessed object is within its lifetime
+    \item \alert{NO} \texttt{union}s, please!
     \end{itemize}
-  \end{block}
+  \end{block}\vspace*{-1ex}
 
   \begin{itemize}
   \item Implement proper serialization where appropriate!
