@@ -1,2 +1,18 @@
 % ==== Backup ====
 \section*{Backup}
+\begin{frame}[fragile]{A very obvious example}
+  \lstinputlisting[style=c++]{code/violate_strict_aliasing.cpp}
+
+  \overlayLayer{
+    \alert{\bfseries I did not say this -- but it's here just for completeness}\\[1em]
+    %
+    \begin{itemize}
+    \item \texttt{-fno-strict-aliasing} option (GCC / clang) may help 
+      %
+    \item Useful for legacy codebases or when you \alert{\bfseries really (really!)} know what you are doing
+      \begin{itemize}
+      \item Linux kernel uses it, e.g. in \linkButton{https://github.com/torvalds/linux/blob/master/arch/arm64/kernel/vdso32/Makefile\#L65}{arch/arm64/kernel/vdso32/Makefile}
+      \end{itemize}
+    \end{itemize}
+  }
+\end{frame}
