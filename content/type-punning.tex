@@ -1,5 +1,52 @@
 % ==== Type Punning done right ====
 \section{Type Punning done right}
 
-\begin{frame}{}
+\begin{frame}{Possible (or not) approaches for type punning}
+  People that type-pun, usually take one of the following approaches:
+  \vfill
+
+  \begin{itemize}
+  \item Based on \texttt{union}
+  \item Using \texttt{reinterpret\_cast} (sometimes combined w/ \texttt{std::launder})
+  \item Use of \texttt{memcpy()}
+  \item \texttt{std::bit\_cast}
+  \item \texttt{std::start\_lifetime\_as}
+  \end{itemize}
+
+  \vfill
+  \pause
+  \textbf{Some} of them lead to \textbf{UB in C++} (but otherwise correct in C)
+\end{frame}
+
+\begin{frame}{\texttt{union}-based}
+\end{frame}
+
+\begin{frame}{\texttt{reinterpret\_cast}-based}
+\end{frame}
+
+\begin{frame}{\texttt{std::launder}: w00t?}
+\end{frame}
+
+\begin{frame}{\texttt{std::launder}: pointer provenance}
+\end{frame}
+
+\begin{frame}{\texttt{std::launder}: example}
+\end{frame}
+
+\begin{frame}{\texttt{memcpy()} over (representation of) different object}
+\end{frame}
+
+\begin{frame}{\texttt{std::bit\_cast}}
+\end{frame}
+
+\begin{frame}{\texttt{std::start\_lifetime\_as} (C++23)}
+\end{frame}
+
+\begin{frame}{In brief\ldots}
+\end{frame}
+
+\begin{frame}{What if C++ $\leq$ 23}
+\end{frame}
+
+\begin{frame}{What if C++ $\leq$ 20}
 \end{frame}
