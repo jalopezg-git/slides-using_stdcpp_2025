@@ -88,6 +88,8 @@
         \item \alert{A \texttt{unsigned char []} object is not within its lifetime!}\footnote{Most compilers will do the right thing, but it's still UB!}
           %
         \item \href{https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p1839r7.html}{P1839R7} is supposed to fix that
+          %
+        \item What about \texttt{std::as\_bytes} / \texttt{std::as\_writable\_bytes} then? \facepalm
         \end{itemize}
       \end{itemize}
       %
@@ -272,8 +274,11 @@
   \item Using \texttt{reinterpret\_cast}
     \begin{itemize}
     \item Pointer-interconvertible: ~~\OK
+    \item To \texttt{char}-like type: ~~[Cast~\OK] [Deref~\question]
     \item \alert{Rest:} ~~\NotOK
     \end{itemize}
+
+  \item Using \texttt{std::as\_bytes} / \texttt{std::as\_writable\_bytes} (C++20) ~~\OK~\question
 
   \item Use of \texttt{memcpy()} ~~\OK
 
