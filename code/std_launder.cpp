@@ -4,17 +4,15 @@
 int main(int argc, char *argv[]) {
   struct MyStruct {
     const float f;
-    const int &i_ref;
   };
 
-  int i = 0x11, j = 0x22;
-  MyStruct obj{12.34f, i};
+  MyStruct obj{12.34f};
 
   MyStruct *p = &obj;
-  std::cout << "f=" << p->f << " i_ref=" << p->i_ref << std::endl;
+  std::cout << "f=" << p->f << std::endl;
 
-  new (static_cast<void*>(p)) MyStruct{3.1415f, j};
+  new (static_cast<void*>(p)) MyStruct{3.1415f};
 
-  std::cout << p->i_ref << std::endl; // ????
-  std::cout << std::launder(p)->i_ref << std::endl; // OK
+  std::cout << p->f << std::endl; // ????
+  std::cout << std::launder(p)->f << std::endl; // OK
 }

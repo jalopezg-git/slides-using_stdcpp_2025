@@ -3,7 +3,7 @@ int fn(int *i, float *f) {
   *f = 3.1415f;
   return *i;
 }
-// Optimizer assumed that value of '*i' cannot be modified by a write to '*f' 
+// Optimizer assumes value of '*i' can't be changed by assigning '*f' 
 
 int main(int argc, char *argv[]) {
   int a = 1;

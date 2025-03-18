@@ -81,13 +81,12 @@
     v2->~T();              //    _/
     v2->push_back(103);    // `\lsthl{UB!}`
   \end{lstlisting}  \vspace{-1em}%
-  \pause%
   %
   \begin{lstlisting}[style=c++]
     ::free(p);
   \end{lstlisting}
 
-  \begin{onlyenv}<5>
+  \begin{onlyenv}<4>
     \overlayLayer{
       \bfseries Accessing an object out of its lifetime is UB\ldots\\[1em]
       \alert{\ldots even for trivial types!}
@@ -101,7 +100,7 @@
   \begin{lstlisting}[style=c++,caption=UB before C++20 (taken from P0593R6)]
     struct X { int a, b; };
     X *make_x() {
-      X *p = (X*)malloc(sizeof(struct X)); // << C++20: implicitly create an X
+      X *p = (X*)malloc(sizeof(struct X)); // C++20: implicitly create X
       p->a = 1;
       p->b = 2;
       return p;
