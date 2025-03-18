@@ -16,3 +16,17 @@
     \end{itemize}
   }
 \end{frame}
+
+\begin{frame}{Type-based Alias Analysis (TBAA)}
+  \textbf{Alias analysis based on the type system of a high level language.}\\[1em]
+
+  LLVM-specific, from \linkButton{https://github.com/llvm/llvm-project/blob/main/llvm/lib/Analysis/TypeBasedAliasAnalysis.cpp}{llvm/lib/Analysis/TypeBasedAliasAnalysis.cpp}:
+  \begin{itemize}
+  \item \textbf{Scalar TBAA:} alias analysis on fundamental datatype, \textbf{regardless of where it appears}.
+
+  \item \textbf{Struct-path aware TBAA:} analysis takes into account \textbf{base type} (struct), \textbf{access type} (leaf, fundamental type), and its \textbf{offset}.
+  \end{itemize}
+
+  \vfill
+  If you are interested, read the very clear 100+ code comment in there!
+\end{frame}
