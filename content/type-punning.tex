@@ -67,6 +67,8 @@
 \begin{frame}[fragile]{\texttt{reinterpret\_cast}-based}
   \inlineCode{reinterpret\_cast$<$T$>$(obj)} is guaranteed to be safe if
   \begin{itemize}
+  \item Pointer $\leftrightarrow$ integral type (e.g. \texttt{uintptr\_t})
+
   \item Pointer-interconvertible \textit{[basic.compound], p. 5}:
     \includegraphics[width=\textwidth]{img/cplusplus_draft/basic.compound.5.png}
 
@@ -273,6 +275,7 @@
 
   \item Using \texttt{reinterpret\_cast}
     \begin{itemize}
+    \item Pointer $\leftrightarrow$ integral type: ~~\OK
     \item Pointer-interconvertible: ~~\OK
     \item To \texttt{char}-like type: ~~[Cast~\OK] [Deref~\question]
     \item \alert{Rest:} ~~\NotOK
